@@ -33,7 +33,6 @@ public class DetailCourseActivity extends AppCompatActivity {
         ActivityDetailCourseBinding activityDetailCourseBinding = ActivityDetailCourseBinding.inflate(getLayoutInflater());
         detailContentBinding = activityDetailCourseBinding.detailContent;
 
-        activityDetailCourseBinding = ActivityDetailCourseBinding.inflate(getLayoutInflater());
         setContentView(activityDetailCourseBinding.getRoot());
 
         setSupportActionBar(activityDetailCourseBinding.toolbar);
