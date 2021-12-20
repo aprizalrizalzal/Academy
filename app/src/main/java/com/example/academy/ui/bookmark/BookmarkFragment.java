@@ -6,17 +6,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ShareCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.academy.BookmarkAdapter;
 import com.example.academy.R;
 import com.example.academy.data.CourseEntity;
 import com.example.academy.databinding.FragmentBookmarkBinding;
-import com.example.academy.utils.DataDummy;
 
 import java.util.List;
 
@@ -41,7 +40,8 @@ public class BookmarkFragment extends Fragment implements BookmarkFragmentCallba
         super.onViewCreated(view, savedInstanceState);
 
         if (getActivity() !=null){
-            List<CourseEntity> courses = DataDummy.generateDummyCourses();
+            BookmarkViewModel viewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(BookmarkViewModel.class);
+            List<CourseEntity> courses = viewModel.getBookmarks();
 
             BookmarkAdapter adapter = new BookmarkAdapter(this);
             adapter.setCourse(courses);

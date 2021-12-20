@@ -4,20 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.academy.DetailCourseAdapter;
 import com.example.academy.R;
 import com.example.academy.data.CourseEntity;
 import com.example.academy.data.ModuleEntity;
 import com.example.academy.databinding.ActivityDetailCourseBinding;
 import com.example.academy.databinding.ContentDetailCourseBinding;
 import com.example.academy.ui.reader.CourseReaderActivity;
-import com.example.academy.utils.DataDummy;
 
 import java.util.List;
 
@@ -42,20 +41,16 @@ public class DetailCourseActivity extends AppCompatActivity {
         }
 
         DetailCourseAdapter adapter = new DetailCourseAdapter();
+        DetailCourseViewModel viewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(DetailCourseViewModel.class);
 
         Bundle extras = getIntent().getExtras();
         if (extras !=null){
             String courseId = extras.getString(EXTRA_COURSE);
             if (courseId !=null){
-                List<ModuleEntity> modules = DataDummy.generateDummyModules(courseId);
+                viewModel.setSelectedCourse(courseId);
+                List<ModuleEntity> modules = viewModel.getModules();
                 adapter.setModules(modules);
-
-                for (int i = 0; i < DataDummy.generateDummyCourses().size(); i++){
-                    CourseEntity courseEntity = DataDummy.generateDummyCourses().get(i);
-                    if (courseEntity.getCourseId().equals(courseId)){
-                        populateCourse(courseEntity);
-                    }
-                }
+                populateCourse(viewModel.getCourse());
 
                 detailContentBinding.rvModule.setNestedScrollingEnabled(false);
                 detailContentBinding.rvModule.setLayoutManager(new LinearLayoutManager(this));

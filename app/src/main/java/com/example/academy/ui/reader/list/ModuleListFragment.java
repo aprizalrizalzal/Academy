@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -13,13 +14,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.academy.ModuleListAdapter;
-import com.example.academy.R;
 import com.example.academy.data.ModuleEntity;
 import com.example.academy.databinding.FragmentModuleListBinding;
 import com.example.academy.ui.reader.CourseReaderActivity;
 import com.example.academy.ui.reader.CourseReaderCallback;
-import com.example.academy.utils.DataDummy;
+import com.example.academy.ui.reader.CourseReaderViewModel;
 
 import java.util.List;
 
@@ -31,6 +30,8 @@ public class ModuleListFragment extends Fragment implements ModuleListAdapter.My
     private ModuleListAdapter adapter;
     private CourseReaderCallback courseReaderCallback;
 
+    private CourseReaderViewModel viewModel;
+
     public ModuleListFragment() {
         // Required empty public constructor
     }
@@ -40,7 +41,7 @@ public class ModuleListFragment extends Fragment implements ModuleListAdapter.My
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         fragmentModuleListBinding = FragmentModuleListBinding.inflate(inflater, container, false);
@@ -51,8 +52,9 @@ public class ModuleListFragment extends Fragment implements ModuleListAdapter.My
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (getActivity() != null) {
+            viewModel = new ViewModelProvider(requireActivity(), new ViewModelProvider.NewInstanceFactory()).get(CourseReaderViewModel.class);
             adapter = new ModuleListAdapter(this);
-            populateRecyclerView(DataDummy.generateDummyModules("a14"));
+            populateRecyclerView(viewModel.getModules());
         }
     }
 
@@ -65,6 +67,7 @@ public class ModuleListFragment extends Fragment implements ModuleListAdapter.My
     @Override
     public void onItemClicked(int position, String moduleId) {
         courseReaderCallback.moveTo(position, moduleId);
+        viewModel.setSelectedModule(moduleId);
     }
 
     private void populateRecyclerView(List<ModuleEntity> modules) {

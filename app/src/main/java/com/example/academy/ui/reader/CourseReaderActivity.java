@@ -3,6 +3,7 @@ package com.example.academy.ui.reader;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 
@@ -19,10 +20,13 @@ public class CourseReaderActivity extends AppCompatActivity implements CourseRea
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_reader);
 
+        CourseReaderViewModel viewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(CourseReaderViewModel.class);
+
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             String courseId = bundle.getString(EXTRA_COURSE_ID);
             if (courseId != null) {
+                viewModel.setSelectedCourse(courseId);
                 populateFragment();
             }
         }

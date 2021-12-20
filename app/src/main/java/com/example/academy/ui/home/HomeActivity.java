@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import com.example.academy.R;
 import com.example.academy.SectionsPagerAdapter;
 import com.example.academy.databinding.ActivityHomeBinding;
 
