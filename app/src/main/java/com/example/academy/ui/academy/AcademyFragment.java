@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 
 import com.example.academy.data.CourseEntity;
 import com.example.academy.databinding.FragmentAcademyBinding;
+import com.example.academy.ui.viewmodel.AcademyViewModel;
+import com.example.academy.ui.viewmodel.ViewModelFactory;
 
 import java.util.List;
 
@@ -37,7 +39,8 @@ public class AcademyFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (getActivity() !=null){
-            AcademyViewModel viewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(AcademyViewModel.class);
+            ViewModelFactory factory = ViewModelFactory.getInstance(getActivity());
+            AcademyViewModel viewModel = new ViewModelProvider(this, factory).get(AcademyViewModel.class);
             List<CourseEntity> courses = viewModel.getCourses();
 
             AcademyAdapter adapter = new AcademyAdapter();

@@ -1,4 +1,4 @@
-package com.example.academy;
+package com.example.academy.ui.home;
 
 import android.content.Context;
 
@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.example.academy.R;
 import com.example.academy.ui.academy.AcademyFragment;
 import com.example.academy.ui.bookmark.BookmarkFragment;
 

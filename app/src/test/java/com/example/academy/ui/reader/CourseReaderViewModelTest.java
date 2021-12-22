@@ -1,17 +1,25 @@
 package com.example.academy.ui.reader;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.example.academy.data.ContentEntity;
 import com.example.academy.data.CourseEntity;
 import com.example.academy.data.ModuleEntity;
+import com.example.academy.data.source.AcademyRepository;
+import com.example.academy.ui.viewmodel.CourseReaderViewModel;
 import com.example.academy.utils.DataDummy;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.List;
 
+@RunWith(MockitoJUnitRunner.class)
 public class CourseReaderViewModelTest {
 
     private CourseReaderViewModel viewModel;
@@ -21,9 +29,12 @@ public class CourseReaderViewModelTest {
     private final List<ModuleEntity> dummyModules = DataDummy.generateDummyModules(courseId);
     private final String moduleId = dummyModules.get(0).getModuleId();
 
+    @Mock
+    private AcademyRepository academyRepository;
+
     @Before
     public void setUp() {
-        viewModel = new CourseReaderViewModel();
+        viewModel = new CourseReaderViewModel(academyRepository);
         viewModel.setSelectedCourse(courseId);
         viewModel.setSelectedModule(moduleId);
 
@@ -33,14 +44,18 @@ public class CourseReaderViewModelTest {
 
     @Test
     public void getModules() {
+        when(academyRepository.getAllModulesByCourse(courseId)).thenReturn(dummyModules);
         List<ModuleEntity> moduleEntities = viewModel.getModules();
+        verify(academyRepository).getAllModulesByCourse(courseId);
         assertNotNull(moduleEntities);
         assertEquals(7, moduleEntities.size());
     }
 
     @Test
     public void getSelectedModule() {
+        when(academyRepository.getContent(courseId, moduleId)).thenReturn(dummyModules.get(0));
         ModuleEntity moduleEntity = viewModel.getSelectedModule();
+        verify(academyRepository).getContent(courseId, moduleId);
         assertNotNull(moduleEntity);
         ContentEntity contentEntity = moduleEntity.contentEntity;
         assertNotNull(contentEntity);

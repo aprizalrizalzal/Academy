@@ -13,7 +13,8 @@ import android.view.ViewGroup;
 
 import com.example.academy.data.ModuleEntity;
 import com.example.academy.databinding.FragmentModuleContentBinding;
-import com.example.academy.ui.reader.CourseReaderViewModel;
+import com.example.academy.ui.viewmodel.CourseReaderViewModel;
+import com.example.academy.ui.viewmodel.ViewModelFactory;
 
 public class ModuleContentFragment extends Fragment {
 
@@ -40,7 +41,8 @@ public class ModuleContentFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (getActivity() != null) {
-            CourseReaderViewModel viewModel = new ViewModelProvider(requireActivity(), new ViewModelProvider.NewInstanceFactory()).get(CourseReaderViewModel.class);
+            ViewModelFactory factory = ViewModelFactory.getInstance(requireActivity());
+            CourseReaderViewModel viewModel = new ViewModelProvider(requireActivity(), factory).get(CourseReaderViewModel.class);
             ModuleEntity module = viewModel.getSelectedModule();
             populateWebView(module);
         }

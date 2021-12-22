@@ -18,7 +18,8 @@ import com.example.academy.data.ModuleEntity;
 import com.example.academy.databinding.FragmentModuleListBinding;
 import com.example.academy.ui.reader.CourseReaderActivity;
 import com.example.academy.ui.reader.CourseReaderCallback;
-import com.example.academy.ui.reader.CourseReaderViewModel;
+import com.example.academy.ui.viewmodel.CourseReaderViewModel;
+import com.example.academy.ui.viewmodel.ViewModelFactory;
 
 import java.util.List;
 
@@ -52,7 +53,8 @@ public class ModuleListFragment extends Fragment implements ModuleListAdapter.My
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (getActivity() != null) {
-            viewModel = new ViewModelProvider(requireActivity(), new ViewModelProvider.NewInstanceFactory()).get(CourseReaderViewModel.class);
+            ViewModelFactory factory = ViewModelFactory.getInstance(requireActivity());
+            viewModel = new ViewModelProvider(requireActivity(), factory).get(CourseReaderViewModel.class);
             adapter = new ModuleListAdapter(this);
             populateRecyclerView(viewModel.getModules());
         }

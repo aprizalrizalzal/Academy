@@ -17,6 +17,8 @@ import com.example.academy.data.ModuleEntity;
 import com.example.academy.databinding.ActivityDetailCourseBinding;
 import com.example.academy.databinding.ContentDetailCourseBinding;
 import com.example.academy.ui.reader.CourseReaderActivity;
+import com.example.academy.ui.viewmodel.DetailCourseViewModel;
+import com.example.academy.ui.viewmodel.ViewModelFactory;
 
 import java.util.List;
 
@@ -41,7 +43,8 @@ public class DetailCourseActivity extends AppCompatActivity {
         }
 
         DetailCourseAdapter adapter = new DetailCourseAdapter();
-        DetailCourseViewModel viewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(DetailCourseViewModel.class);
+        ViewModelFactory factory = ViewModelFactory.getInstance(this);
+        DetailCourseViewModel viewModel = new ViewModelProvider(this, factory).get(DetailCourseViewModel.class);
 
         Bundle extras = getIntent().getExtras();
         if (extras !=null){
@@ -50,6 +53,7 @@ public class DetailCourseActivity extends AppCompatActivity {
                 viewModel.setSelectedCourse(courseId);
                 List<ModuleEntity> modules = viewModel.getModules();
                 adapter.setModules(modules);
+
                 populateCourse(viewModel.getCourse());
 
                 detailContentBinding.rvModule.setNestedScrollingEnabled(false);
