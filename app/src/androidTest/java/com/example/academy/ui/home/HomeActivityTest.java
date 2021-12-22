@@ -7,14 +7,17 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.contrib.RecyclerViewActions;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 import com.example.academy.R;
 import com.example.academy.data.CourseEntity;
 import com.example.academy.utils.DataDummy;
+import com.example.academy.utils.EspressoIdlingResource;
 
-import org.junit.Rule;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
@@ -22,21 +25,26 @@ import java.util.List;
 public class HomeActivityTest {
     private final List<CourseEntity> dummyCourse = DataDummy.generateDummyCourses();
 
-    @Rule
-    public ActivityScenarioRule activityRule = new ActivityScenarioRule<>(HomeActivity.class);
+    @Before
+    public void setup() {
+        ActivityScenario.launch(HomeActivity.class);
+        IdlingRegistry.getInstance().register(EspressoIdlingResource.getEspressoIdlingResource());
+    }
+
+    @After
+    public void tearDown() {
+        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.getEspressoIdlingResource());
+    }
 
     @Test
     public void loadCourses() {
-        delayTwoSecond();
         onView(withId(R.id.rv_academy)).check(matches(isDisplayed()));
         onView(withId(R.id.rv_academy)).perform(RecyclerViewActions.scrollToPosition(dummyCourse.size()));
     }
 
     @Test
     public void loadDetailCourse() {
-        delayTwoSecond();
         onView(withId(R.id.rv_academy)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        delayTwoSecond();
         onView(withId(R.id.text_title)).check(matches(isDisplayed()));
         onView(withId(R.id.text_title)).check(matches(withText(dummyCourse.get(0).getTitle())));
         onView(withId(R.id.text_date)).check(matches(isDisplayed()));
@@ -45,39 +53,24 @@ public class HomeActivityTest {
 
     @Test
     public void loadModule() {
-        delayTwoSecond();
         onView(withId(R.id.rv_academy)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        delayTwoSecond();
         onView(withId(R.id.btn_start)).perform(click());
-        delayTwoSecond();
         onView(withId(R.id.rv_module)).check(matches(isDisplayed()));
     }
 
     @Test
     public void loadDetailModule() {
-        delayTwoSecond();
         onView(withId(R.id.rv_academy)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        delayTwoSecond();
         onView(withId(R.id.btn_start)).perform(click());
-        delayTwoSecond();
         onView(withId(R.id.rv_module)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        delayTwoSecond();
         onView(withId(R.id.web_view)).check(matches(isDisplayed()));
     }
 
     @Test
     public void loadBookmarks() {
         onView(withText("Bookmark")).perform(click());
-        delayTwoSecond();
         onView(withId(R.id.rv_bookmark)).check(matches(isDisplayed()));
         onView(withId(R.id.rv_bookmark)).perform(RecyclerViewActions.scrollToPosition(dummyCourse.size()));
     }
 
-    private void delayTwoSecond() {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 }
