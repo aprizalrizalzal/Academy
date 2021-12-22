@@ -20,7 +20,7 @@ import java.util.List;
 public class AcademyAdapter extends RecyclerView.Adapter<AcademyAdapter.CourseViewHolder> {
     private final List<CourseEntity> listCourses = new ArrayList<>();
 
-    public void setCourse(List<CourseEntity> listCourses){
+    public void setCourses(List<CourseEntity> listCourses){
         if (listCourses == null) return;
         this.listCourses.clear();
         this.listCourses.addAll(listCourses);

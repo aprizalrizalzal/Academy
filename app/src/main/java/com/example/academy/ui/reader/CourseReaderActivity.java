@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.os.Bundle;
 
 import com.example.academy.R;
+import com.example.academy.databinding.ActivityCourseReaderBinding;
 import com.example.academy.ui.reader.content.ModuleContentFragment;
 import com.example.academy.ui.reader.list.ModuleListFragment;
 import com.example.academy.ui.viewmodel.CourseReaderViewModel;
@@ -16,11 +17,13 @@ import com.example.academy.ui.viewmodel.ViewModelFactory;
 public class CourseReaderActivity extends AppCompatActivity implements CourseReaderCallback {
 
     public static final String EXTRA_COURSE_ID = "extra_course_id";
+    ActivityCourseReaderBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_course_reader);
+        binding = ActivityCourseReaderBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         ViewModelFactory factory = ViewModelFactory.getInstance(this);
         CourseReaderViewModel viewModel = new ViewModelProvider(this, factory).get(CourseReaderViewModel.class);

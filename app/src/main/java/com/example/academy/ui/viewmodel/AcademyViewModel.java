@@ -1,5 +1,6 @@
 package com.example.academy.ui.viewmodel;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.academy.data.CourseEntity;
@@ -15,7 +16,7 @@ public class AcademyViewModel extends ViewModel {
         this.academyRepository = mAcademyRepository;
     }
 
-    public List<CourseEntity> getCourses() {
+    public LiveData<List<CourseEntity>> getCourses() {
         return academyRepository.getAllCourses();
     }
 }

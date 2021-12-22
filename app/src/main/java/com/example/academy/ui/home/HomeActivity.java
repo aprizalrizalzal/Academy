@@ -12,13 +12,13 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ActivityHomeBinding activityHomeBinding = ActivityHomeBinding.inflate(getLayoutInflater());
-        setContentView(activityHomeBinding.getRoot());
+        ActivityHomeBinding binding = ActivityHomeBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
 
-        activityHomeBinding.viewPager.setAdapter(sectionsPagerAdapter);
-        activityHomeBinding.tabs.setupWithViewPager(activityHomeBinding.viewPager);
+        binding.viewPager.setAdapter(sectionsPagerAdapter);
+        binding.tabs.setupWithViewPager(binding.viewPager);
 
         if (getSupportActionBar() !=null){
             getSupportActionBar().setElevation(0);

@@ -27,13 +27,16 @@ public class HomeActivityTest {
 
     @Test
     public void loadCourses() {
+        delayTwoSecond();
         onView(withId(R.id.rv_academy)).check(matches(isDisplayed()));
         onView(withId(R.id.rv_academy)).perform(RecyclerViewActions.scrollToPosition(dummyCourse.size()));
     }
 
     @Test
     public void loadDetailCourse() {
+        delayTwoSecond();
         onView(withId(R.id.rv_academy)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        delayTwoSecond();
         onView(withId(R.id.text_title)).check(matches(isDisplayed()));
         onView(withId(R.id.text_title)).check(matches(withText(dummyCourse.get(0).getTitle())));
         onView(withId(R.id.text_date)).check(matches(isDisplayed()));
@@ -42,23 +45,39 @@ public class HomeActivityTest {
 
     @Test
     public void loadModule() {
+        delayTwoSecond();
         onView(withId(R.id.rv_academy)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        delayTwoSecond();
         onView(withId(R.id.btn_start)).perform(click());
+        delayTwoSecond();
         onView(withId(R.id.rv_module)).check(matches(isDisplayed()));
     }
 
     @Test
     public void loadDetailModule() {
+        delayTwoSecond();
         onView(withId(R.id.rv_academy)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        delayTwoSecond();
         onView(withId(R.id.btn_start)).perform(click());
+        delayTwoSecond();
         onView(withId(R.id.rv_module)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        delayTwoSecond();
         onView(withId(R.id.web_view)).check(matches(isDisplayed()));
     }
 
     @Test
     public void loadBookmarks() {
         onView(withText("Bookmark")).perform(click());
+        delayTwoSecond();
         onView(withId(R.id.rv_bookmark)).check(matches(isDisplayed()));
         onView(withId(R.id.rv_bookmark)).perform(RecyclerViewActions.scrollToPosition(dummyCourse.size()));
+    }
+
+    private void delayTwoSecond() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.academy.ui.bookmark;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,7 +24,7 @@ import java.util.List;
 
 public class BookmarkFragment extends Fragment implements BookmarkFragmentCallback{
 
-    private FragmentBookmarkBinding fragmentBookmarkBinding;
+    private FragmentBookmarkBinding binding;
 
     public BookmarkFragment() {
         // Required empty public constructor
@@ -33,10 +34,11 @@ public class BookmarkFragment extends Fragment implements BookmarkFragmentCallba
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        fragmentBookmarkBinding = FragmentBookmarkBinding.inflate(inflater, container,false);
-        return fragmentBookmarkBinding.getRoot();
+        binding = FragmentBookmarkBinding.inflate(inflater, container,false);
+        return binding.getRoot();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -44,14 +46,19 @@ public class BookmarkFragment extends Fragment implements BookmarkFragmentCallba
         if (getActivity() !=null){
             ViewModelFactory factory = ViewModelFactory.getInstance(getActivity());
             BookmarkViewModel viewModel = new ViewModelProvider(this, factory).get(BookmarkViewModel.class);
-            List<CourseEntity> courses = viewModel.getBookmarks();
 
             BookmarkAdapter adapter = new BookmarkAdapter(this);
-            adapter.setCourse(courses);
 
-            fragmentBookmarkBinding.rvBookmark.setLayoutManager(new LinearLayoutManager(getContext()));
-            fragmentBookmarkBinding.rvBookmark.setHasFixedSize(true);
-            fragmentBookmarkBinding.rvBookmark.setAdapter(adapter);
+            binding.progressBar.setVisibility(View.VISIBLE);
+            viewModel.getBookmarks().observe(requireActivity(), courses -> {
+                binding.progressBar.setVisibility(View.GONE);
+                adapter.setCourses(courses);
+                adapter.notifyDataSetChanged();
+            });
+
+            binding.rvBookmark.setLayoutManager(new LinearLayoutManager(getContext()));
+            binding.rvBookmark.setHasFixedSize(true);
+            binding.rvBookmark.setAdapter(adapter);
         }
     }
 

@@ -1,7 +1,9 @@
 package com.example.academy.ui.detail;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -27,16 +29,17 @@ public class DetailCourseActivity extends AppCompatActivity {
     public static final String EXTRA_COURSE = "extra_course";
     private ContentDetailCourseBinding detailContentBinding;
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ActivityDetailCourseBinding activityDetailCourseBinding = ActivityDetailCourseBinding.inflate(getLayoutInflater());
-        detailContentBinding = activityDetailCourseBinding.detailContent;
+        ActivityDetailCourseBinding binding = ActivityDetailCourseBinding.inflate(getLayoutInflater());
+        detailContentBinding = binding.detailContent;
 
-        setContentView(activityDetailCourseBinding.getRoot());
+        setContentView(binding.getRoot());
 
-        setSupportActionBar(activityDetailCourseBinding.toolbar);
+        setSupportActionBar(binding.toolbar);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -50,19 +53,14 @@ public class DetailCourseActivity extends AppCompatActivity {
         if (extras !=null){
             String courseId = extras.getString(EXTRA_COURSE);
             if (courseId !=null){
+                detailContentBinding.progressBar.setVisibility(View.VISIBLE);
                 viewModel.setSelectedCourse(courseId);
-                List<ModuleEntity> modules = viewModel.getModules();
-                adapter.setModules(modules);
-
-                populateCourse(viewModel.getCourse());
-
-                detailContentBinding.rvModule.setNestedScrollingEnabled(false);
-                detailContentBinding.rvModule.setLayoutManager(new LinearLayoutManager(this));
-                detailContentBinding.rvModule.setHasFixedSize(true);
-                detailContentBinding.rvModule.setAdapter(adapter);
-
-                DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(detailContentBinding.rvModule.getContext(), DividerItemDecoration.VERTICAL);
-                detailContentBinding.rvModule.addItemDecoration(dividerItemDecoration);
+                viewModel.getModules().observe(this, modules -> {
+                    detailContentBinding.progressBar.setVisibility(View.GONE);
+                    adapter.setModules(modules);
+                    adapter.notifyDataSetChanged();
+                });
+                viewModel.getCourse().observe(this, this::populateCourse);
             }
         }
     }

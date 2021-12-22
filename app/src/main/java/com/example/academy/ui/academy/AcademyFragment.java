@@ -1,5 +1,6 @@
 package com.example.academy.ui.academy;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,7 +22,7 @@ import java.util.List;
 
 public class AcademyFragment extends Fragment {
 
-    private FragmentAcademyBinding fragmentAcademyBinding;
+    private FragmentAcademyBinding binding;
 
     public AcademyFragment() {
         // Required empty public constructor
@@ -31,24 +32,31 @@ public class AcademyFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        fragmentAcademyBinding = FragmentAcademyBinding.inflate(inflater, container,false);
-        return fragmentAcademyBinding.getRoot();
+        binding = FragmentAcademyBinding.inflate(inflater, container,false);
+        return binding.getRoot();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (getActivity() !=null){
             ViewModelFactory factory = ViewModelFactory.getInstance(getActivity());
             AcademyViewModel viewModel = new ViewModelProvider(this, factory).get(AcademyViewModel.class);
-            List<CourseEntity> courses = viewModel.getCourses();
 
             AcademyAdapter adapter = new AcademyAdapter();
-            adapter.setCourse(courses);
 
-            fragmentAcademyBinding.rvAcademy.setLayoutManager(new LinearLayoutManager(getContext()));
-            fragmentAcademyBinding.rvAcademy.setHasFixedSize(true);
-            fragmentAcademyBinding.rvAcademy.setAdapter(adapter);
+            binding.progressBar.setVisibility(View.VISIBLE);
+            viewModel.getCourses().observe(requireActivity(), courses -> {
+                binding.progressBar.setVisibility(View.GONE);
+                        adapter.setCourses(courses);
+                        adapter.notifyDataSetChanged();
+                    }
+            );
+
+            binding.rvAcademy.setLayoutManager(new LinearLayoutManager(getContext()));
+            binding.rvAcademy.setHasFixedSize(true);
+            binding.rvAcademy.setAdapter(adapter);
         }
     }
 }

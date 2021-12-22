@@ -19,7 +19,7 @@ import com.example.academy.ui.viewmodel.ViewModelFactory;
 public class ModuleContentFragment extends Fragment {
 
     public static final String TAG = ModuleContentFragment.class.getSimpleName();
-    private FragmentModuleContentBinding fragmentModuleContentBinding;
+    private FragmentModuleContentBinding binding;
 
     public ModuleContentFragment() {
         // Required empty public constructor
@@ -33,8 +33,8 @@ public class ModuleContentFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        fragmentModuleContentBinding = FragmentModuleContentBinding.inflate(inflater, container, false);
-        return fragmentModuleContentBinding.getRoot();
+        binding = FragmentModuleContentBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
@@ -43,12 +43,18 @@ public class ModuleContentFragment extends Fragment {
         if (getActivity() != null) {
             ViewModelFactory factory = ViewModelFactory.getInstance(requireActivity());
             CourseReaderViewModel viewModel = new ViewModelProvider(requireActivity(), factory).get(CourseReaderViewModel.class);
-            ModuleEntity module = viewModel.getSelectedModule();
-            populateWebView(module);
+
+            binding.progressBar.setVisibility(View.VISIBLE);
+            viewModel.getSelectedModule().observe(requireActivity(), module -> {
+                binding.progressBar.setVisibility(View.GONE);
+                if (module != null) {
+                    populateWebView(module);
+                }
+            });
         }
     }
 
     private void populateWebView(ModuleEntity module) {
-        fragmentModuleContentBinding.webView.loadData(module.contentEntity.getContent(), "text/html", "UTF-8");
+        binding.webView.loadData(module.contentEntity.getContent(), "text/html", "UTF-8");
     }
 }

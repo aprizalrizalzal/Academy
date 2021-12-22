@@ -55,4 +55,5 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
 
     implementation "androidx.lifecycle:lifecycle-viewmodel:$archLifecycleVersion"
+    testImplementation "androidx.arch.core:core-testing:$androidCoreTestVersion"
 }

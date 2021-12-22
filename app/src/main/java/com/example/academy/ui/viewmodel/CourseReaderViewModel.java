@@ -1,5 +1,6 @@
 package com.example.academy.ui.viewmodel;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.academy.data.ContentEntity;
@@ -26,11 +27,11 @@ public class CourseReaderViewModel extends ViewModel {
         this.academyRepository = mAcademyRepository;
     }
 
-    public List<ModuleEntity> getModules() {
+    public LiveData<List<ModuleEntity>> getModules() {
         return academyRepository.getAllModulesByCourse(courseId);
     }
 
-    public ModuleEntity getSelectedModule() {
+    public LiveData<ModuleEntity> getSelectedModule() {
         return academyRepository.getContent(courseId, moduleId);
     }
 }

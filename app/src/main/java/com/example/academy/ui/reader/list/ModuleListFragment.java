@@ -27,7 +27,7 @@ public class ModuleListFragment extends Fragment implements ModuleListAdapter.My
 
     public static final String TAG = ModuleListFragment.class.getSimpleName();
 
-    private FragmentModuleListBinding fragmentModuleListBinding;
+    private FragmentModuleListBinding binding;
     private ModuleListAdapter adapter;
     private CourseReaderCallback courseReaderCallback;
 
@@ -45,8 +45,8 @@ public class ModuleListFragment extends Fragment implements ModuleListAdapter.My
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        fragmentModuleListBinding = FragmentModuleListBinding.inflate(inflater, container, false);
-        return fragmentModuleListBinding.getRoot();
+        binding = FragmentModuleListBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
@@ -56,7 +56,8 @@ public class ModuleListFragment extends Fragment implements ModuleListAdapter.My
             ViewModelFactory factory = ViewModelFactory.getInstance(requireActivity());
             viewModel = new ViewModelProvider(requireActivity(), factory).get(CourseReaderViewModel.class);
             adapter = new ModuleListAdapter(this);
-            populateRecyclerView(viewModel.getModules());
+            binding.progressBar.setVisibility(View.VISIBLE);
+            viewModel.getModules().observe(requireActivity(), this::populateRecyclerView);
         }
     }
 
@@ -73,12 +74,12 @@ public class ModuleListFragment extends Fragment implements ModuleListAdapter.My
     }
 
     private void populateRecyclerView(List<ModuleEntity> modules) {
-        fragmentModuleListBinding.progressBar.setVisibility(View.GONE);
+        binding.progressBar.setVisibility(View.GONE);
         adapter.setModules(modules);
-        fragmentModuleListBinding.rvModule.setLayoutManager(new LinearLayoutManager(getContext()));
-        fragmentModuleListBinding.rvModule.setHasFixedSize(true);
-        fragmentModuleListBinding.rvModule.setAdapter(adapter);
+        binding.rvModule.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.rvModule.setHasFixedSize(true);
+        binding.rvModule.setAdapter(adapter);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
-        fragmentModuleListBinding.rvModule.addItemDecoration(dividerItemDecoration);
+        binding.rvModule.addItemDecoration(dividerItemDecoration);
     }
 }

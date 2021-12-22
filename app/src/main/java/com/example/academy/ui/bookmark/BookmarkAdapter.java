@@ -25,7 +25,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Course
         this.callback = callback;
     }
 
-    public void setCourse(List<CourseEntity> listCourses){
+    public void setCourses(List<CourseEntity> listCourses){
         if (listCourses == null) return;
         this.listCourses.clear();
         this.listCourses.addAll(listCourses);
